@@ -16,6 +16,7 @@ namespace VendingMachine
         private const string notAcceptedNominal = "Włożono nie akceptowalny nominał";
         private const string coinLoop = "1 - wybierz produkt, 2 - dobrodzieju, wrzuć więcej pinionżków";
         private const string chooseError = "Wybrano niewałaściwą akcję, spróbuj jeszcze raz.";
+        private const string chooseProduct = "Wybierz produkt";
 
         private static float fullMoney = 0;
 
@@ -96,6 +97,34 @@ namespace VendingMachine
                     } while (error);
                 } while (moreMoney);
                 ShowCredit();
+
+                Output(products.Show());
+
+                bool choosedProduct = false;
+                int prod;
+                do
+                {
+                    Console.Clear();
+                    ShowCredit();
+                    Output(products.Show());
+                    Output(chooseProduct);
+                    try
+                    {
+                        prod = int.Parse(Input());
+                    }
+                    catch (System.FormatException)
+                    {
+                        continue;
+                    }
+
+                    int length = products.Products.Count;
+                    for(int i = 1; i <= length; i++)
+                    {
+                        if (i == prod)
+                            choosedProduct = true;
+                    }
+                } while (!choosedProduct);
+
                 end = true;
             } while (!end);
             Pause();
