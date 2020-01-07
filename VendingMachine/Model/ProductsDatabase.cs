@@ -39,5 +39,16 @@ namespace VendingMachine.Model
             }
             return null;
         }
+
+        public string Show()
+        {
+            string output = "\n";
+            foreach(var prod in products)
+            {
+                output += prod.Id + " " + prod.Name + " Cena: " + prod.Price + "zł";
+                output += "\n";
+            }
+            return output;
+        }
     }
 }
