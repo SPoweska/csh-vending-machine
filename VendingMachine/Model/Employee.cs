@@ -11,12 +11,19 @@ namespace VendingMachine.Model
     /// </summary>
     class Employee
     {
-        private int id;
+        private Int64 id;
         private string name;
         private string password;
 
-        public int Id { get => id; set => id = value; }
+        public Int64 Id { get => id; set => id = value; }
         public string Name { get => name; set => name = value; }
         public string Password { get => password; set => password = value; }
+
+        public Employee(Int64 id, string name, string password)
+        {
+            this.id = id;
+            this.name = name;
+            this.password = password;
+        }
     }
 }

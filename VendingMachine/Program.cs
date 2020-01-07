@@ -11,12 +11,11 @@ namespace VendingMachine
     {
         static void Main(string[] args)
         {
-            ProductsDatabase data = new ProductsDatabase();
-            foreach(var prod in data.Products)
-            {
-                Console.WriteLine(prod.Name);
-            }
-            Console.ReadKey(); 
+            EmployeesDatabase emp = new EmployeesDatabase();
+            Console.WriteLine(emp.FetchEmployeeById(1).Name);
+            ProductsDatabase prod = new ProductsDatabase();
+            Console.WriteLine(prod.FetchProductById(2).Name);
+            Console.ReadKey();
         }
 
         /// <summary>
