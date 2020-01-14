@@ -8,6 +8,10 @@ using System.Threading.Tasks;
 
 namespace VendingMachine.Model
 {
+    /// <summary>
+    /// Database of the employees 
+    /// Implements method for fetching employee by his id
+    /// </summary>
     class EmployeesDatabase
     {
         private List<Employee> employees;
@@ -30,6 +34,11 @@ namespace VendingMachine.Model
             }
         }
 
+        /// <summary>
+        /// Fetch employee by id
+        /// </summary>
+        /// <param name="id">user id</param>
+        /// <returns>employee with given id</returns>
         public Employee FetchEmployeeById(int id)
         {
             foreach(var emp in employees)

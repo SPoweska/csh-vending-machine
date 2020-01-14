@@ -8,6 +8,10 @@ using System.Data;
 
 namespace VendingMachine.Model
 {
+    /// <summary>
+    /// Database of the products 
+    /// Implements method for fetching product by its id
+    /// </summary>
     class ProductsDatabase
     {
         private List<Product> products;
@@ -30,6 +34,11 @@ namespace VendingMachine.Model
             }
         }
 
+        /// <summary>
+        /// Fetch product by its id
+        /// </summary>
+        /// <param name="id">product id</param>
+        /// <returns>product with given id</returns>
         public Product FetchProductById(int id)
         {
             foreach (var prod in products)
@@ -40,6 +49,10 @@ namespace VendingMachine.Model
             return null;
         }
 
+        /// <summary>
+        /// Returns text with all products
+        /// </summary>
+        /// <returns>Text with all products</returns>
         public string Show()
         {
             string output = "\n";
