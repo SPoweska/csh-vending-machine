@@ -56,8 +56,25 @@ namespace VendingMachine
 
         private static void AddProduct()
         {
+            int input = -1;
+            bool correctInput = false;
             Console.Clear();
             ShowTransactions();
+            do
+            {
+                Console.WriteLine("Wybierz prododukt który chcesz dodać "+adminName);
+                try
+                {
+                    input = int.Parse(Console.ReadLine());
+                    correctInput = true;
+                }
+                catch (System.FormatException)
+                {
+                    correctInput = false;
+                }
+            } while (!correctInput);            
+
+
         }
 
         private static int CheckAdminInfo()
