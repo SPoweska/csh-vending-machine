@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using VendingMachine.Model;
 
@@ -18,6 +19,7 @@ namespace VendingMachine
         private const string chooseError = "Wybrano niewałaściwą akcję, spróbuj jeszcze raz.";
         private const string chooseProduct = "Wybierz produkt";
         private const string notEnoughMoney = "Nie masz wystarczająco dużo pinionżków";
+        private const string endTransaction = "Oto twoja reszta: ";
 
         private static float fullMoney = 0;
 
@@ -41,10 +43,20 @@ namespace VendingMachine
                 ShowCredit();
                 Output(products.Show());
                 ChooseProduct(products);
+                EndTransaction();
 
                 end = true;
             } while (!end);
             Pause();
+        }
+
+        private static void EndTransaction()
+        {
+            Output(endTransaction + fullMoney + "zł");
+            Thread.Sleep(5000);
+            fullMoney = 0;
+            Console.Clear();
+            StartMachine();
         }
 
         private static void ChooseProduct(ProductsDatabase products)
@@ -74,11 +86,18 @@ namespace VendingMachine
                 }
             } while (!choosedProduct);
 
+            double productCost = products.Products[prod - 1].Price;
+
             //check if price is lower or equal to credit
-            if (products.Products[prod - 1].Price > fullMoney)
+            if (productCost > fullMoney)
             {
                 Output(notEnoughMoney);
                 StartMachine();
+            }
+            else
+            {
+                fullMoney = ChangeCalculator.CalculateChange(fullMoney, (float)productCost);
+                Console.Clear();
             }
         }
 
@@ -155,6 +174,7 @@ namespace VendingMachine
                         error = true;
                         break;
                 }
+                Console.Clear();
             } while (error);
             return moreMoney;
         }
