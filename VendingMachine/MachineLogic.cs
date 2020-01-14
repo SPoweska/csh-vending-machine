@@ -164,8 +164,7 @@ namespace VendingMachine
                         using (SQLiteConnection conn = new SQLiteConnection("Data Source=VMbaza.db;Version=3;New=False;Compress=True;"))
                         {
                             conn.Open();
-                            SQLiteCommand cmd = conn.CreateCommand();
-                            //cmd.CommandText ="DECLARE @DecrementValue int SET @DecrementValue = 1 UPDATE Products SET Quantity = Quantity -@DecrementValue WHERE ID='" +prod+"'";
+                            SQLiteCommand cmd = conn.CreateCommand();                            
                             cmd.CommandText = "UPDATE Products SET Quantity = Quantity - '"+decrement+"' WHERE ID='" + prod + "'";
                             cmd.ExecuteNonQuery();                            
 

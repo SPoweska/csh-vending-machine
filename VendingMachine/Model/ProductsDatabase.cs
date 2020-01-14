@@ -50,7 +50,20 @@ namespace VendingMachine.Model
             return null;
         }
 
-        public void UpdateProductQuantity(int index, int quantity)
+        public static void AddNewProduct(string name,float price,int quantity)//zrobić
+        {
+            int sold = 0;
+            using (SQLiteConnection conn = new SQLiteConnection("Data Source=VMbaza.db;Version=3;New=False;Compress=True;"))
+            {
+                conn.Open();
+                SQLiteCommand cmd = conn.CreateCommand();
+                cmd.CommandText = "INSERT INTO Products (Name,Price,Quantity,Sold) VALUES ('" + name + "','" + price + "','" + quantity + "','" +sold+"')";
+                cmd.ExecuteNonQuery();               
+
+            }
+
+        }
+        public void UpdateProductQuantity(int index, int quantity)//zrobić
         {
 
         }
