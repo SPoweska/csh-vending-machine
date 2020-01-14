@@ -63,6 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdminLogic.cs" />
     <Compile Include="ChangeCalculator.cs" />
     <Compile Include="MachineLogic.cs" />
     <Compile Include="Model\Employee.cs" />

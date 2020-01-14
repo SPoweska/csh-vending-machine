@@ -30,7 +30,8 @@ namespace VendingMachine.Model
                 cmd.CommandText = "SELECT * FROM Products";
                 SQLiteDataAdapter da = new SQLiteDataAdapter(cmd.CommandText, conn);
                 da.Fill(dt);
-                products = dt.AsEnumerable().Select(p => new Product(p.Field<Int64>(0), p.Field<string>(1), p.Field<double>(2), p.Field<Int64>(3), p.Field<Int64>(4))).ToList();
+                products = dt.AsEnumerable().Select(p => new Product(p.Field<Int64>(0), p.Field<string>(1),
+                    p.Field<double>(2), p.Field<Int64>(3), p.Field<Int64>(4))).ToList();
             }
         }
 
@@ -49,6 +50,11 @@ namespace VendingMachine.Model
             return null;
         }
 
+        public void UpdateProductQuantity(int index, int quantity)
+        {
+
+        }
+
         /// <summary>
         /// Returns text with all products
         /// </summary>
@@ -59,6 +65,21 @@ namespace VendingMachine.Model
             foreach(var prod in products)
             {
                 output += prod.Id + " " + prod.Name + " Cena: " + prod.Price + "zł";
+                output += "\n";
+            }
+            return output;
+        } 
+        
+        /// <summary>
+        /// Returns text with all products
+        /// </summary>
+        /// <returns>Text with all products</returns>
+        public string ShowAdmin()
+        {
+            string output = "\n";
+            foreach(var prod in products)
+            {
+                output += prod.Id + " " + prod.Name + " Ilość: " + prod.Quantity;
                 output += "\n";
             }
             return output;

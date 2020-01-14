@@ -29,6 +29,7 @@ namespace VendingMachine
 
         private static List<float> acceptedNominals;
         private static float fullMoney = 0;
+        private static bool isAdmin = false;
 
         /// <summary>
         /// Setup accepted nopminals and start the machine
@@ -53,6 +54,10 @@ namespace VendingMachine
             {
                 ProductsDatabase products = ShowProducts();
                 Pay();
+                if (isAdmin)
+                {
+                    AdminLogic.StartAdminLogic();
+                }
                 ShowCredit();
                 Output(products.Show());
                 ChooseProduct(products);
@@ -76,13 +81,21 @@ namespace VendingMachine
 
                 float money;
                 Output(insertCoin);
+                string input = "";
                 try
                 {
-                    money = float.Parse(Input());
+                    input = Input();
+                    money = float.Parse(input);
                     Console.Clear();
                 }
                 catch (System.FormatException ex)
                 {
+                    if (AdminLogic.IsAdmin(input))
+                    {
+                        Console.Clear();
+                        isAdmin = true;
+                        return;
+                    }
                     Console.Clear();
                     continue;
                 }
@@ -143,7 +156,10 @@ namespace VendingMachine
                 for (int i = 1; i <= length; i++)
                 {
                     if (i == prod)
+                    {
+                        //decrement choosed product quantity
                         choosedProduct = true;
+                    }
                 }
             } while (!choosedProduct);
 
