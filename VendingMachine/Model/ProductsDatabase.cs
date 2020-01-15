@@ -151,7 +151,61 @@ namespace VendingMachine.Model
                 MachineLogic.ChooseProduct(product);
             }
         }
+        public static void DropQuantity(int id, int quantity, ProductsDatabase product)
+        {
+            int length = product.Products.Count;
+            int drop = quantity;
 
+            if (length >= id)
+            {
+                for (int i = 1; i <= length; i++)
+                {
+                    if (i == id)
+                    {
+                        //drop choosed product quantity                    
+                        using (SQLiteConnection conn = new SQLiteConnection("Data Source=VMbaza.db;Version=3;New=False;Compress=True;"))
+                        {
+                            conn.Open();
+                            SQLiteCommand cmd = conn.CreateCommand();
+                            cmd.CommandText = "UPDATE Products SET Quantity = Quantity - '" + drop + "' WHERE ID='" + id + "'";
+                            cmd.ExecuteNonQuery();
+
+                        }
+                    }
+                }
+            }
+            else
+            {
+
+            }
+        }
+        public static void DeleteProduct(int id, ProductsDatabase product)
+        {
+            int length = product.Products.Count;
+            int delete = id;
+
+            if (length >= id)
+            {
+                for (int i = 1; i <= length; i++)
+                {
+                    if (i == id)
+                    {            
+                        using (SQLiteConnection conn = new SQLiteConnection("Data Source=VMbaza.db;Version=3;New=False;Compress=True;"))
+                        {
+                            conn.Open();
+                            SQLiteCommand cmd = conn.CreateCommand();
+                            cmd.CommandText = "DELETE FROM Products WHERE ID='" + id + "';UPDATE Products SET ID = ID-1 WHERE ID >='"+id+"'";
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+            }
+            else
+            {
+
+            }
+
+        }
 
         private static void Pause()
         {
@@ -159,4 +213,9 @@ namespace VendingMachine.Model
         }
 
     }
+
+
+       
+
 }
+

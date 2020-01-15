@@ -25,7 +25,6 @@ namespace VendingMachine
             }
             return false;
         }
-
         public static void StartAdminLogic()
         {
             Console.Clear();
@@ -33,7 +32,26 @@ namespace VendingMachine
             ChooseAction(input);
             Console.ReadKey();
         }
-
+        public static int CheckAdminInfo()
+        {
+            Console.Clear();
+            bool correctInput = false;
+            int input = -1;
+            do
+            {
+                Console.WriteLine("Siema, " + adminName + " czy chcesz: \n" + "1 - Uzupełnić produkt \n" + "2 - Zobaczyc liste transakcji \n" + "3 - Dodać nowy produkt\n"+"4 - Zmniejszyć ilość produktu\n"+"5 - Usunąć produkt\n" + "9 - Opuścić tryb administratora");
+                try
+                {
+                    input = int.Parse(Console.ReadLine());
+                    correctInput = true;
+                }
+                catch (System.FormatException)
+                {
+                    correctInput = false;
+                }
+            } while (!correctInput);
+            return input;
+        }
         private static void ChooseAction(int input)
         {
             switch(input)
@@ -47,6 +65,12 @@ namespace VendingMachine
                 case 3:
                     AddNewProduct();
                     break;
+                case 4:
+                    DropProduct();
+                    break;
+                case 5:
+                    DeleteProduct();                    
+                    break;
                 case 9:
                     MachineLogic.StartMachine();
                     break;
@@ -54,14 +78,107 @@ namespace VendingMachine
                     Console.WriteLine("Coś poszło nie tak!");
                     break;
             }
-        }        
-
-        private static void ShowTransactions()
+        }
+        private static void ChooseTransAction()
         {
+            int input = -1;
+           bool correctInput = false;
+            Console.WriteLine("\n" + "Czy chcesz:\n" + "1 - Wyeksportować transakcje do pliku CSV\n" + "2 - Wyczyścić listę transakcji\n" + "9 - Wrócić do poprzedniego ekranu");            
+            do
+            {
+                try
+                {
+                    input = int.Parse(Console.ReadLine());
+                    correctInput = true;
+                }
+                catch (System.FormatException)
+                {
+                    correctInput = false;
+                }
+            } while (!correctInput);
+            switch (input)
+            {
+                case 1:
+                    TransactionsDatabase.ExportCSV();                    
+                    break;
+                case 2:
+                    TransactionsDatabase.CleanTransactions();                    
+                    break;
+                case 9:
+                    break;
+                default:
+                    break;
+            }
+        }        
+        private static void AddProduct()
+        {
+            int input = -1;
+            bool correctInput = false;
+            int quantity = -1;
+            Console.Clear();
+            ProductsDatabase products = new ProductsDatabase();
+            Console.WriteLine(products.ShowAdmin());
+
+
+            do
+            {
+                Console.WriteLine("Wybierz produkt który chcesz uzupełnić " + adminName);
+                try
+                {
+                    input = int.Parse(Console.ReadLine());
+                    correctInput = true;
+
+                }
+                catch (System.FormatException)
+                {
+                    correctInput = false;
+                }
+            } while (!correctInput);
+            do
+            {
+                Console.WriteLine("Ile sztuk chcesz dodać?  " + adminName);
+                try
+                {
+                    quantity = int.Parse(Console.ReadLine());
+                    correctInput = true;
+
+                }
+                catch (System.FormatException)
+                {
+                    correctInput = false;
+                }
+            } while (!correctInput);
+
+            Console.WriteLine(adminName + " Czy chcesz dodać " + quantity + " sztuk produktu numer " + input + "?\n" + "1 - Tak\n" + "2 - Nie\n" + "3 - Chce dodać inny produkt");
+            int actionChoice = int.Parse(Console.ReadLine());
+
+            switch (actionChoice)
+            {
+                case 1:
+                    ProductsDatabase.Increment(input, quantity, products);
+                    Console.WriteLine("Dodano");
+                    Thread.Sleep(2500);
+                    StartAdminLogic();
+                    break;
+                case 2:
+                    StartAdminLogic();
+                    break;
+                case 3:
+                    AddProduct();
+                    break;
+                default:
+                    Console.WriteLine("Coś poszło nie tak!");
+                    Thread.Sleep(2500);
+                    StartAdminLogic();                    
+                    break;
+            }
+        }
+        private static void ShowTransactions()
+        {            
             TransactionsDatabase transactionsDatabase = new TransactionsDatabase();
             Console.WriteLine(transactionsDatabase.ShowTransactions());
-        }
-
+            ChooseTransAction();
+        }        
         private static void AddNewProduct()
         {
             bool correctInputP=false;
@@ -137,13 +254,13 @@ namespace VendingMachine
                     break;
             }
 
-        }
-
-        private static void AddProduct() //Dokończyć
+        }                   
+        private static void DropProduct()
         {
             int input = -1;
             bool correctInput = false;
             int quantity = -1;
+            int actionChoice = -1;
             Console.Clear();
             ProductsDatabase products = new ProductsDatabase();
             Console.WriteLine(products.ShowAdmin());
@@ -151,7 +268,7 @@ namespace VendingMachine
 
             do
             {
-                Console.WriteLine("Wybierz produkt który chcesz uzupełnić " + adminName);
+                Console.WriteLine("Wybierz produkt którego ilość chcesz zmniejszyć " + adminName);
                 try
                 {
                     input = int.Parse(Console.ReadLine());
@@ -165,7 +282,7 @@ namespace VendingMachine
             } while (!correctInput);
             do
             {
-                Console.WriteLine("Ile sztuk chcesz dodać?  " + adminName);
+                Console.WriteLine("Ile sztuk chcesz wyjąć?  " + adminName);
                 try
                 {
                     quantity = int.Parse(Console.ReadLine());
@@ -178,42 +295,12 @@ namespace VendingMachine
                 }
             } while (!correctInput);
 
-            Console.WriteLine(adminName+" Czy chcesz dodać "+quantity+ " sztuk produktu numer " + input + "?\n" + "1 - Tak\n" + "2 - Nie\n" + "3 - Chce dodać inny produkt");
-            int actionChoice = int.Parse(Console.ReadLine());
-
-            switch (actionChoice)
-            {
-                case 1:                    
-                    ProductsDatabase.Increment(input,quantity,products);
-                    Console.WriteLine("Dodano");
-                    Thread.Sleep(2500);
-                    StartAdminLogic();
-                    break;
-                case 2:
-                    StartAdminLogic();
-                    break;
-                case 3:
-                    AddProduct();
-                    break;
-                default:
-                    Console.WriteLine("Coś poszło nie tak!");
-                    break;
-            }
-
-
-
-        }
-            
-            private static int CheckAdminInfo()
-        {
-            bool correctInput = false;
-            int input = -1;
+            Console.WriteLine(adminName + " Czy chcesz wyjąć " + quantity + " sztuk produktu numer " + input + "?\n" + "1 - Tak\n" + "2 - Nie\n" + "3 - Chce wyjąć inny produkt");
             do
             {
-                Console.WriteLine("Siema, " + adminName + " czy chcesz: \n" + "1 - Uzupełnić produkt \n" + "2 - Zobaczyc liste transakcji \n" + "3 - Dodać nowy produkt\n"+"9 - Opuścić tryb administratora");
                 try
                 {
-                    input = int.Parse(Console.ReadLine());
+                    actionChoice = int.Parse(Console.ReadLine());
                     correctInput = true;
                 }
                 catch (System.FormatException)
@@ -221,7 +308,91 @@ namespace VendingMachine
                     correctInput = false;
                 }
             } while (!correctInput);
-            return input;
+
+            switch (actionChoice)
+            {
+                case 1:
+                    ProductsDatabase.DropQuantity(input, quantity, products);
+                    Console.WriteLine("Wyjęto");
+                    Thread.Sleep(2500);
+                    StartAdminLogic();
+                    break;
+                case 2:
+                    StartAdminLogic();
+                    break;
+                case 3:
+                    DropProduct();
+                    break;
+                default:
+                    Console.WriteLine("Coś poszło nie tak!");
+                    Thread.Sleep(2500);
+                    StartAdminLogic();
+                    break;
+            }
+
+
         }
+        private static void DeleteProduct()
+        {
+            int input = -1;
+            bool correctInput = false;
+            int actionChoice = -1;
+            Console.Clear();
+            ProductsDatabase products = new ProductsDatabase();
+            Console.WriteLine(products.ShowAdmin());
+
+
+            do
+            {
+                Console.WriteLine("Wybierz produkt który ilość chcesz usunąć " + adminName);
+                try
+                {
+                    input = int.Parse(Console.ReadLine());
+                    correctInput = true;
+
+                }
+                catch (System.FormatException)
+                {
+                    correctInput = false;
+                }
+            } while (!correctInput);            
+
+            Console.WriteLine(adminName + " Czy chcesz usunąć produkt numer " + input + "?\n" + "1 - Tak\n" + "2 - Nie\n" + "3 - Chce usunąć inny produkt");
+            do
+            {
+                try
+                {
+                    actionChoice = int.Parse(Console.ReadLine());
+                    correctInput = true;
+                }
+                catch (System.FormatException)
+                {
+                    correctInput = false;
+                }
+            }while (!correctInput);
+
+            switch (actionChoice)
+            {
+                case 1:
+                    ProductsDatabase.DeleteProduct(input, products);
+                    Console.WriteLine("Skasowano");
+                    Thread.Sleep(2500);
+                    StartAdminLogic();
+                    break;
+                case 2:
+                    StartAdminLogic();
+                    break;
+                case 3:
+                    DropProduct();
+                    break;
+                default:
+                    Console.WriteLine("Coś poszło nie tak!");
+                    Thread.Sleep(2500);
+                    StartAdminLogic();
+                    break;
+            }
+
+        }
+        
         }
     }

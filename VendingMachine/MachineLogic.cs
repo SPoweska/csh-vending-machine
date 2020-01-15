@@ -92,7 +92,7 @@ namespace VendingMachine
                     money = float.Parse(input);
                     Console.Clear();
                 }
-                catch (System.FormatException ex)
+                catch (System.FormatException)
                 {
                     if (AdminLogic.IsAdmin(input))
                     {
