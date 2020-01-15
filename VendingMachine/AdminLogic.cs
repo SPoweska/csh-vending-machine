@@ -28,6 +28,7 @@ namespace VendingMachine
 
         public static void StartAdminLogic()
         {
+            Console.Clear();
             int input = CheckAdminInfo();
             ChooseAction(input);
             Console.ReadKey();
@@ -46,6 +47,9 @@ namespace VendingMachine
                 case 3:
                     AddNewProduct();
                     break;
+                case 9:
+                    MachineLogic.StartMachine();
+                    break;
                 default:
                     Console.WriteLine("Coś poszło nie tak!");
                     break;
@@ -58,7 +62,7 @@ namespace VendingMachine
             Console.WriteLine(transactionsDatabase.ShowTransactions());
         }
 
-        private static void AddNewProduct() //Dokończyć i uporządkować
+        private static void AddNewProduct()
         {
             bool correctInputP=false;
             bool correctInputQ=false;
@@ -174,7 +178,7 @@ namespace VendingMachine
                 }
             } while (!correctInput);
 
-            Console.WriteLine("Czy chcesz dodać "+quantity+ " sztuk produktu numer " + input + "?\n" + "1 - Tak\n" + "2 - Nie\n" + "3 - Chce dodać inny produkt");
+            Console.WriteLine(adminName+" Czy chcesz dodać "+quantity+ " sztuk produktu numer " + input + "?\n" + "1 - Tak\n" + "2 - Nie\n" + "3 - Chce dodać inny produkt");
             int actionChoice = int.Parse(Console.ReadLine());
 
             switch (actionChoice)
@@ -206,7 +210,7 @@ namespace VendingMachine
             int input = -1;
             do
             {
-                Console.WriteLine("Siema " + adminName + " czy chcesz: \n" + "1 - Uzupełnić produkt \n" + "2 - Zobaczyc liste transakcji \n" + "3 - Dodać nowy produkt");
+                Console.WriteLine("Siema, " + adminName + " czy chcesz: \n" + "1 - Uzupełnić produkt \n" + "2 - Zobaczyc liste transakcji \n" + "3 - Dodać nowy produkt\n"+"9 - Opuścić tryb administratora");
                 try
                 {
                     input = int.Parse(Console.ReadLine());

@@ -50,8 +50,9 @@ namespace VendingMachine
         /// <summary>
         /// Start machine logic
         /// </summary>
-        private static void StartMachine()
+        public static void StartMachine()
         {
+            Console.Clear();
             bool end = false;
             do
             {
