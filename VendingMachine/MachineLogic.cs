@@ -25,8 +25,10 @@ namespace VendingMachine
         private const string chooseProduct = "Wybierz produkt";
         private const string notEnoughMoney = "Nie masz wystarczająco dużo pinionżków";        
         private const string endTransaction = "Oto twoja reszta: ";
+        private const string endTransaction2 = " i twój napój";
         private const string wrongNumber = "Wybrano zły numer!";
         private const string wrongFormat = "To nie jest numer!";
+        private const string itemUnavailable = "Przepraszamy, obecnie ten produkt jest niedostępny";
 
         #endregion
 
@@ -143,6 +145,7 @@ namespace VendingMachine
             bool choosedProduct = false;
             int prod = 0;
             double productCost;
+            Int64 productQuantity;
             int length = products.Products.Count;
             do
             {
@@ -170,22 +173,33 @@ namespace VendingMachine
                     Output(wrongFormat);
                     Thread.Sleep(2500);
                 }                 
-            } while (!choosedProduct);                     
-            productCost = products.Products[prod - 1].Price;
-
-            //check if price is lower or equal to credit
-            if (productCost > fullMoney)
+            } while (!choosedProduct);
+            productQuantity = products.Products[prod - 1].Quantity;
+            if(productQuantity>0)
             {
-                Output(notEnoughMoney);
-                StartMachine();
+                productCost = products.Products[prod - 1].Price;
+
+                //check if price is lower or equal to credit
+                if (productCost > fullMoney)
+                {
+                    Output(notEnoughMoney);
+                    StartMachine();
+                }
+                else
+                {
+                    fullMoney = ChangeCalculator.CalculateChange(fullMoney, (float)productCost);
+                    ProductsDatabase.Decrement(prod, products);
+                    TransactionsDatabase.AddTransaction(prod);
+                    Console.Clear();
+                }
             }
             else
             {
-                fullMoney = ChangeCalculator.CalculateChange(fullMoney, (float)productCost);
-                ProductsDatabase.Decrement(prod, products);
-                TransactionsDatabase.AddTransaction(prod);
-                Console.Clear();
-            }
+                Output(itemUnavailable);
+                EndTransaction();                
+                Pause();
+                StartMachine();                
+            }            
         }
 
         /// <summary>
@@ -193,7 +207,7 @@ namespace VendingMachine
         /// </summary>
         private static void EndTransaction()
         {
-            Output(endTransaction + fullMoney + "zł");
+            Output(endTransaction + fullMoney + "zł"+ endTransaction2);
             Thread.Sleep(5000);
             fullMoney = 0;
             Console.Clear();
@@ -220,28 +234,44 @@ namespace VendingMachine
         /// <returns>does user want to give more money</returns>
         private static bool MoreMoneyInput(bool moreMoney)
         {
-            string input;
-            bool error = false;
-            do
-            {
-                ShowCredit();
-                Output(coinLoop);
-                input = Input();
-                switch (input[0])
+            int input=0;            
+            bool correctInput = false;            
+                do
                 {
-                    case '1':
+                    Console.Clear();
+                    ShowCredit();
+                    Output(coinLoop);
+                    try
+                    {
+                        input = int.Parse(Input());
+                        if (input > 0)
+                        {
+                            correctInput = true;
+                        }
+                        else { correctInput = false; }
+
+                    }
+                    catch (System.FormatException)
+                    {
+                        correctInput = false;
+                    }
+                } while (!correctInput);
+            Console.Clear();
+            ShowCredit();
+            Output(coinLoop);
+            switch (input)
+                {
+                    case 1:
                         moreMoney = false;
                         break;
-                    case '2':
+                    case 2:
                         moreMoney = true;
                         break;
                     default:
-                        Output(chooseError);
-                        error = true;
+                        Output(chooseError);                        
                         break;
                 }
-                Console.Clear();
-            } while (error);
+                Console.Clear();            
             return moreMoney;
         }
 
@@ -255,11 +285,11 @@ namespace VendingMachine
         }
 
         /// <summary>
-        /// Pause the console by reading user key
+        /// Pause the console
         /// </summary>
         private static void Pause()
         {
-            Console.ReadKey();
+            Thread.Sleep(3000);
         }
 
         /// <summary>

@@ -55,7 +55,11 @@ class AdminLogic
                 try
                 {
                     input = int.Parse(Console.ReadLine());
-                    correctInput = true;
+                    if (input > 0)
+                    {
+                        correctInput = true;
+                    }
+                    else { correctInput = false; }
                 }
                 catch (System.FormatException)
                 {
@@ -70,37 +74,50 @@ class AdminLogic
         /// <param name="input">Admin action selector</param>
         /// </summary>
         private static void ChooseAction(int input)
-        {
-            switch(input)
-            {
-                case 1:
-                    AddProduct();
-                    break;
-                case 2:
-                    ShowTransactions();
-                    break;
-                case 3:
-                    AddNewProduct();
-                    break;
-                case 4:
-                    DropProduct();
-                    break;
-                case 5:
-                    DeleteProduct();                    
-                    break;
-                case 9:
-                    MachineLogic.StartMachine();
-                    break;
-                default:
-                    Console.WriteLine("Coś poszło nie tak!");
-                    break;
+        {            
+            if (input > 0) {
+                switch (input)
+                {
+                    case 1:
+                        AddProduct();
+                        break;
+                    case 2:
+                        ShowTransactions();
+                        break;
+                    case 3:
+                        AddNewProduct();
+                        break;
+                    case 4:
+                        DropProduct();
+                        break;
+                    case 5:
+                        DeleteProduct();
+                        break;
+                    case 9:
+                        MachineLogic.StartMachine();
+                        break;
+                    default:
+                        Console.Clear();
+                        Console.WriteLine("Coś poszło nie tak!");
+                        Thread.Sleep(3000);
+                        Console.Clear();
+                        CheckAdminInfo();
+                        break;
+                }                
+            }
+            else {
+                Console.Clear();
+                Console.WriteLine("Błąd - spóbuj ponownie");
+                Thread.Sleep(2500);
+                CheckAdminInfo();
             }
         }
         /// <summary>
         /// Transaction menu selection
         /// </summary>
-        private static void ChooseTransAction()
+        public static void ChooseTransAction()
         {
+            Console.Clear();
             int input = -1;
            bool correctInput = false;
             Console.WriteLine("\n" + "Czy chcesz:\n" + "1 - Wyeksportować transakcje do pliku CSV\n" + "2 - Wyczyścić listę transakcji\n" + "9 - Wrócić do poprzedniego ekranu");            
@@ -109,11 +126,17 @@ class AdminLogic
                 try
                 {
                     input = int.Parse(Console.ReadLine());
-                    correctInput = true;
+                    if (input > 0)
+                    {
+                        correctInput = true;
+                    }
+                    else { correctInput = false; }
                 }
                 catch (System.FormatException)
                 {
                     Console.WriteLine("To nie jest jedna z opcji");
+                    Thread.Sleep(3000);
+                    Console.Clear();
                     correctInput = false;
                 }
             } while (!correctInput);
@@ -126,16 +149,19 @@ class AdminLogic
                     TransactionsDatabase.CleanTransactions();                    
                     break;
                 case 9:
+                    StartAdminLogic();
                     break;
                 default:
                     Console.WriteLine("Coś poszło nie tak");
+                    Thread.Sleep(3000);                    
+                    ChooseTransAction();
                     break;
             }
         }
         /// <summary>
         /// Updates product quantity in database
         /// </summary>
-        private static void AddProduct()
+        public static void AddProduct()
         {
             int input = -1;
             bool correctInput = false;
@@ -151,12 +177,18 @@ class AdminLogic
                 try
                 {
                     input = int.Parse(Console.ReadLine());
-                    correctInput = true;
+                    if (input > 0)
+                    {
+                        correctInput = true;
+                    }
+                    else { correctInput = false; }
 
                 }
                 catch (System.FormatException)
                 {
                     correctInput = false;
+                    Thread.Sleep(3000);
+                    Console.Clear();
                 }
             } while (!correctInput);
             do
@@ -165,7 +197,11 @@ class AdminLogic
                 try
                 {
                     quantity = int.Parse(Console.ReadLine());
-                    correctInput = true;
+                    if (quantity > 0)
+                    {
+                        correctInput = true;
+                    }
+                    else { correctInput = false; }
 
                 }
                 catch (System.FormatException)
@@ -194,14 +230,14 @@ class AdminLogic
                 default:
                     Console.WriteLine("Coś poszło nie tak!");
                     Thread.Sleep(2500);
-                    StartAdminLogic();                    
+                    StartAdminLogic();
                     break;
             }
         }
         /// <summary>
         /// Shows transaction
         /// </summary>
-        private static void ShowTransactions()
+        public static void ShowTransactions()
         {            
             TransactionsDatabase transactionsDatabase = new TransactionsDatabase();
             Console.WriteLine(transactionsDatabase.ShowTransactions());
@@ -210,7 +246,7 @@ class AdminLogic
         /// <summary>
         /// Adds new product to database
         /// </summary>
-        private static void AddNewProduct()
+        public static void AddNewProduct()
         {            
             bool correctInput = false;
             string name;
@@ -228,7 +264,11 @@ class AdminLogic
 
                 {
                     price = float.Parse(Console.ReadLine());
-                    correctInput = true;
+                    if (price > 0)
+                    {
+                        correctInput = true;
+                    }
+                    else { correctInput = false; }
                 }
                 catch (System.FormatException)
                 {
@@ -242,10 +282,11 @@ class AdminLogic
                 try
                 {
                     quantity = int.Parse(Console.ReadLine());
-                    if (quantity >= 1)
+                    if (input > 0)
                     {
                         correctInput = true;
                     }
+                    else { correctInput = false; }
                 }
                 catch (System.FormatException)
                 {
@@ -258,11 +299,15 @@ class AdminLogic
             do
             {
                 Console.WriteLine("Czy wszystko się zgadza " + adminName + "?\n" + "Nazwa: " + name + " cena: " + price + " ilość: " + quantity);
-                Console.WriteLine("1 - Wszystko git  \n 2 - Chce poprawić dane \n");
+                Console.WriteLine("1 - Wszystko git  \n 2 - Chce poprawić dane \n"+"3 - Anuluj i wróć do menu administratora ");
                 try
                 {
                     input = int.Parse(Console.ReadLine());
-                    correctInput = true;
+                    if (input > 0)
+                    {
+                        correctInput = true;
+                    }
+                    else { correctInput = false; }
                 }
                 catch (System.FormatException)
                 {
@@ -279,7 +324,10 @@ class AdminLogic
                     break;
                 case 2:
                     AddNewProduct();
-                    break;               
+                    break;  
+                case 3:
+                    StartAdminLogic();
+                    break;
                 default:
                     Console.WriteLine("To nie jest jedna z opcji");
                     break;
@@ -289,15 +337,17 @@ class AdminLogic
         /// <summary>
         /// Drops product quantity
         /// </summary>
-        private static void DropProduct()
+        public static void DropProduct()
         {
             int input = -1;
             bool correctInput = false;
             int quantity = -1;
             int actionChoice = -1;
+            int prod = 0;
             Console.Clear();
             ProductsDatabase products = new ProductsDatabase();
             Console.WriteLine(products.ShowAdmin());
+            Int64 productQuantity;
 
 
             do
@@ -306,7 +356,11 @@ class AdminLogic
                 try
                 {
                     input = int.Parse(Console.ReadLine());
-                    correctInput = true;
+                    if (input > 0)
+                    {
+                        correctInput = true;
+                    }
+                    else { correctInput = false; }
 
                 }
                 catch (System.FormatException)
@@ -320,7 +374,11 @@ class AdminLogic
                 try
                 {
                     quantity = int.Parse(Console.ReadLine());
-                    correctInput = true;
+                    if (quantity > 0)
+                    {
+                        correctInput = true;
+                    }
+                    else { correctInput = false; }
 
                 }
                 catch (System.FormatException)
@@ -328,14 +386,23 @@ class AdminLogic
                     correctInput = false;
                 }
             } while (!correctInput);
-
+            productQuantity = Convert.ToInt32(products.Products[prod - 1].Quantity);
+            
+            if (quantity>=productQuantity)
+            {
+                quantity = Convert.ToInt32(productQuantity);
+            }
             Console.WriteLine(adminName + " Czy chcesz wyjąć " + quantity + " sztuk produktu numer " + input + "?\n" + "1 - Tak\n" + "2 - Nie\n" + "3 - Chce wyjąć inny produkt");
             do
             {
                 try
                 {
                     actionChoice = int.Parse(Console.ReadLine());
-                    correctInput = true;
+                    if (actionChoice > 0)
+                    {
+                        correctInput = true;
+                    }
+                    else { correctInput = false; }
                 }
                 catch (System.FormatException)
                 {
@@ -369,7 +436,7 @@ class AdminLogic
         /// <summary>
         /// Delete product record from database
         /// </summary>
-        private static void DeleteProduct()
+        public static void DeleteProduct()
         {
             int input = -1;
             bool correctInput = false;
@@ -385,7 +452,11 @@ class AdminLogic
                 try
                 {
                     input = int.Parse(Console.ReadLine());
-                    correctInput = true;
+                    if (input > 0)
+                    {
+                        correctInput = true;
+                    }
+                    else { correctInput = false; }
 
                 }
                 catch (System.FormatException)
@@ -400,7 +471,11 @@ class AdminLogic
                 try
                 {
                     actionChoice = int.Parse(Console.ReadLine());
-                    correctInput = true;
+                    if (actionChoice > 0)
+                    {
+                        correctInput = true;
+                    }
+                    else { correctInput = false; }
                 }
                 catch (System.FormatException)
                 {

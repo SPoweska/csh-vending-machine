@@ -117,21 +117,25 @@ namespace VendingMachine.Model
                 {
                     if (i == id)
                     {
-                        //increment choosed product quantity                    
-                        using (SQLiteConnection conn = new SQLiteConnection("Data Source=VMbaza.db;Version=3;New=False;Compress=True;"))
+                        if (increment >= 1)
                         {
-                            conn.Open();
-                            SQLiteCommand cmd = conn.CreateCommand();
-                            cmd.CommandText = "UPDATE Products SET Quantity = Quantity + '" + increment + "' WHERE ID='" + id + "'";
-                            cmd.ExecuteNonQuery();
+                            using (SQLiteConnection conn = new SQLiteConnection("Data Source=VMbaza.db;Version=3;New=False;Compress=True;"))
+                            {
+                                conn.Open();
+                                SQLiteCommand cmd = conn.CreateCommand();
+                                cmd.CommandText = "UPDATE Products SET Quantity = Quantity + '" + increment + "' WHERE ID='" + id + "'";
+                                cmd.ExecuteNonQuery();
 
+                            }
                         }
                     }
                 }
             }
             else
             {
-
+                Console.WriteLine("Zrobiłeś coś źle, spróbuj jeszcze raz");
+                Pause();
+                AdminLogic.AddProduct();
             }
         }
         /// <summary>
@@ -163,7 +167,7 @@ namespace VendingMachine.Model
             }
             else
             {
-                Console.WriteLine("Wybrano niewłaściwy numer");
+                Console.WriteLine("Zrobiłeś coś źle, spróbuj jeszcze raz");
                 Pause();
                 MachineLogic.ChooseProduct(product);
             }
@@ -178,6 +182,7 @@ namespace VendingMachine.Model
         {
             int length = product.Products.Count;
             int drop = quantity;
+
 
             if (length >= id)
             {
@@ -199,7 +204,9 @@ namespace VendingMachine.Model
             }
             else
             {
-
+                Console.WriteLine("Zrobiłeś coś źle, spróbuj jeszcze raz");
+                Pause();
+                AdminLogic.DropProduct();
             }
         }
         /// <summary>
@@ -209,8 +216,7 @@ namespace VendingMachine.Model
         /// </summary>
         public static void DeleteProduct(int id, ProductsDatabase product)
         {
-            int length = product.Products.Count;
-            int delete = id;
+            int length = product.Products.Count;          
 
             if (length >= id)
             {
@@ -230,7 +236,9 @@ namespace VendingMachine.Model
             }
             else
             {
-
+                Console.WriteLine("Zrobiłeś coś źle, spróbuj jeszcze raz");
+                Pause();
+                AdminLogic.DeleteProduct();
             }
 
         }
