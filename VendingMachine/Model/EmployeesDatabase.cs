@@ -17,7 +17,9 @@ namespace VendingMachine.Model
         private List<Employee> employees;
 
         public List<Employee> Employees { get => employees; }
-
+        /// <summary>
+        /// Class constructor
+        /// </summary>
         public EmployeesDatabase()
         {
             employees = new List<Employee>();

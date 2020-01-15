@@ -19,8 +19,10 @@ namespace VendingMachine.Model
         public Int64 Id { get => id; set => id = value; }
         public string Name { get => name; set => name = value; }
         public double Price { get => price; set => price = value; }
-        public Int64 Quantity { get => quantity; set => quantity = value; }        
-
+        public Int64 Quantity { get => quantity; set => quantity = value; }
+        /// <summary>
+        /// Class constructor
+        /// </summary>
         public Product(Int64 id, string name, double price, Int64 quantity)
         {
             this.id = id;

@@ -17,7 +17,9 @@ namespace VendingMachine.Model
         public string Name { get => name; set => name = value; }
         public double Price { get => price; set => price = value; }
         public string DateTime { get => datetime; set => name = value; }
-
+        /// <summary>
+        /// Class constructor
+        /// </summary>
         public Transaction(Int64 id,string datetime, string name, double price )
         {
             this.id = id;

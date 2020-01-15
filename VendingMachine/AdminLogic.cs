@@ -7,11 +7,17 @@ using VendingMachine.Model;
 using System.Threading;
 
 namespace VendingMachine
-{
-    class AdminLogic
+{ 
+/// <summary>
+/// All the admin logic
+/// </summary>
+class AdminLogic
     {
-        static string adminName;        
-
+        static string adminName;
+        /// <summary>
+        /// Checks input looking for password
+        /// <param name="input">Admin action selector</param>
+        /// </summary>
         public static bool IsAdmin(string input)
         {
             EmployeesDatabase employees = new EmployeesDatabase();
@@ -25,6 +31,9 @@ namespace VendingMachine
             }
             return false;
         }
+        /// <summary>
+        /// Starts admin logic        
+        /// </summary>
         public static void StartAdminLogic()
         {
             Console.Clear();
@@ -32,6 +41,9 @@ namespace VendingMachine
             ChooseAction(input);
             Console.ReadKey();
         }
+        /// <summary>
+        /// Main homescreen        
+        /// </summary>
         public static int CheckAdminInfo()
         {
             Console.Clear();
@@ -53,6 +65,10 @@ namespace VendingMachine
             } while (!correctInput);
             return input;
         }
+        /// <summary>
+        /// Main admin menu
+        /// <param name="input">Admin action selector</param>
+        /// </summary>
         private static void ChooseAction(int input)
         {
             switch(input)
@@ -80,6 +96,9 @@ namespace VendingMachine
                     break;
             }
         }
+        /// <summary>
+        /// Transaction menu selection
+        /// </summary>
         private static void ChooseTransAction()
         {
             int input = -1;
@@ -112,7 +131,10 @@ namespace VendingMachine
                     Console.WriteLine("Coś poszło nie tak");
                     break;
             }
-        }        
+        }
+        /// <summary>
+        /// Updates product quantity in database
+        /// </summary>
         private static void AddProduct()
         {
             int input = -1;
@@ -176,16 +198,20 @@ namespace VendingMachine
                     break;
             }
         }
+        /// <summary>
+        /// Shows transaction
+        /// </summary>
         private static void ShowTransactions()
         {            
             TransactionsDatabase transactionsDatabase = new TransactionsDatabase();
             Console.WriteLine(transactionsDatabase.ShowTransactions());
             ChooseTransAction();
-        }        
+        }
+        /// <summary>
+        /// Adds new product to database
+        /// </summary>
         private static void AddNewProduct()
-        {
-            bool correctInputP=false;
-            bool correctInputQ=false;
+        {            
             bool correctInput = false;
             string name;
             float price=0f;
@@ -202,14 +228,14 @@ namespace VendingMachine
 
                 {
                     price = float.Parse(Console.ReadLine());
-                    correctInputP = true;
+                    correctInput = true;
                 }
                 catch (System.FormatException)
                 {
                     Console.WriteLine("Zrobiłeś coś źle, wyprować daną jeszcze raz");
-                    correctInputP = false;
+                    correctInput = false;
                 }
-            } while (!correctInputP);
+            } while (!correctInput);
 
             do
             { Console.WriteLine("Podaj ilość :");
@@ -218,15 +244,15 @@ namespace VendingMachine
                     quantity = int.Parse(Console.ReadLine());
                     if (quantity >= 1)
                     {
-                        correctInputQ = true;
+                        correctInput = true;
                     }
                 }
                 catch (System.FormatException)
                 {
                     Console.WriteLine("Zrobiłeś coś źle, wyprować daną jeszcze raz");
-                    correctInputQ = false;
+                    correctInput = false;
                 }
-            } while (!correctInputQ);  
+            } while (!correctInput);  
             
 
             do
@@ -259,7 +285,10 @@ namespace VendingMachine
                     break;
             }
 
-        }                   
+        }
+        /// <summary>
+        /// Drops product quantity
+        /// </summary>
         private static void DropProduct()
         {
             int input = -1;
@@ -337,6 +366,9 @@ namespace VendingMachine
 
 
         }
+        /// <summary>
+        /// Delete product record from database
+        /// </summary>
         private static void DeleteProduct()
         {
             int input = -1;

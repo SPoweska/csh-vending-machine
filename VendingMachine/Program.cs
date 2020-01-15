@@ -7,6 +7,9 @@ using VendingMachine.Model;
 
 namespace VendingMachine
 {
+    /// <summary>
+    /// Base class
+    /// </summary>
     class Program
     {
 

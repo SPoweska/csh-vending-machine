@@ -19,7 +19,9 @@ namespace VendingMachine.Model
         public DataTable dtable;
 
         public List<Product> Products { get => products; set => products = value; }
-
+        /// <summary>
+        /// Class constructor
+        /// </summary>
         public ProductsDatabase()
         {
             products = new List<Product>();
@@ -36,7 +38,6 @@ namespace VendingMachine.Model
                     p.Field<double>(2), p.Field<Int64>(3))).ToList();
             }
         }
-
         /// <summary>
         /// Fetch product by its id
         /// </summary>
@@ -51,7 +52,13 @@ namespace VendingMachine.Model
             }
             return null;
         }
-
+        /// <summary>
+        /// Adds new record to the table
+        /// </summary>
+        /// <param name="name">product name</param>
+        /// <param name="price">product price</param>
+        /// <param name="quantity">product quantity</param>
+        /// <returns>product with given id</returns>
         public static void AddNewProduct(string name, float price, int quantity)
         {
             using (SQLiteConnection conn = new SQLiteConnection("Data Source=VMbaza.db;Version=3;New=False;Compress=True;"))
@@ -64,7 +71,6 @@ namespace VendingMachine.Model
             }
 
         }
-
         /// <summary>
         /// Returns text with all products
         /// </summary>
@@ -79,9 +85,8 @@ namespace VendingMachine.Model
             }
             return output;
         }
-
         /// <summary>
-        /// Returns text with all products
+        /// Returns text with all products for admin
         /// </summary>
         /// <returns>Text with all products</returns>
         public string ShowAdmin()
@@ -94,6 +99,12 @@ namespace VendingMachine.Model
             }
             return output;
         }
+        /// <summary>
+        /// Increments quantity of products in database
+        ///<param name="id">product id</param>
+        ///<param name="quantity">product quantity</param>
+        ///<param name="product">ProductsDatabase element</param>
+        /// </summary>
         public static void Increment(int id,int quantity, ProductsDatabase product)
         {
 
@@ -123,6 +134,11 @@ namespace VendingMachine.Model
 
             }
         }
+        /// <summary>
+        /// Decrements quantity of products in database  
+        ///<param name="id">product id</param>
+        ///<param name="product">ProductsDatabase element</param>
+        /// </summary>
         public static void Decrement(int id, ProductsDatabase product)
         {
             int length = product.Products.Count;
@@ -152,6 +168,12 @@ namespace VendingMachine.Model
                 MachineLogic.ChooseProduct(product);
             }
         }
+        /// <summary>
+        /// Reduces the field value in the database by the given value
+        ///<param name="id">product id</param>
+        ///<param name="quantity">product quantity</param>
+        ///<param name="product">ProductsDatabase element</param>
+        /// </summary>
         public static void DropQuantity(int id, int quantity, ProductsDatabase product)
         {
             int length = product.Products.Count;
@@ -180,6 +202,11 @@ namespace VendingMachine.Model
 
             }
         }
+        /// <summary>
+        /// Deletes records from table 
+        /// ///<param name="id">product id</param>
+        /// /// ///<param name="product">ProductsDatabase element</param>
+        /// </summary>
         public static void DeleteProduct(int id, ProductsDatabase product)
         {
             int length = product.Products.Count;
@@ -207,6 +234,9 @@ namespace VendingMachine.Model
             }
 
         }
+        /// <summary>
+        /// Delays the machine          
+        /// </summary>
         private static void Pause()
         {
             Thread.Sleep(3000);

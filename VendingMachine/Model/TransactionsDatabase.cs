@@ -19,7 +19,9 @@ namespace VendingMachine.Model
         private List<Transaction> transactions;
 
         public List<Transaction> Transactions { get => transactions; }
-
+        /// <summary>
+        /// Class constructor
+        /// </summary>
         public TransactionsDatabase()
         {
             transactions = new List<Transaction>();
@@ -34,8 +36,7 @@ namespace VendingMachine.Model
                 da.Fill(dt);
                 transactions = dt.AsEnumerable().Select(e => new Transaction(e.Field<Int64>(0), e.Field<string>(1), e.Field<string>(2),e.Field<double>(3))).ToList();
             }
-        }
-                
+        }                
         /// <summary>
         /// Returns text with all products
         /// </summary>
@@ -51,6 +52,10 @@ namespace VendingMachine.Model
             }
             return output;
         }
+        /// <summary>
+        /// Adds transaction to database
+        ///<param name="id">Product ID</param>
+        /// </summary>        
         public static void AddTransaction(int id)
         {
             ProductsDatabase pd = new ProductsDatabase();            
@@ -67,6 +72,9 @@ namespace VendingMachine.Model
                     }
                 
         }
+        /// <summary>
+        /// Deletes all records in database table
+        /// </summary>
         public static void CleanTransactions()
         {
             using (SQLiteConnection conn = new SQLiteConnection("Data Source=VMbaza.db;Version=3;New=False;Compress=True;"))
@@ -81,6 +89,9 @@ namespace VendingMachine.Model
             AdminLogic.CheckAdminInfo();
 
         }
+        /// <summary>
+        /// Exports list of transactions to CSV file
+        /// </summary>
         public static void ExportCSV()
         {
             ProductsDatabase pd = new ProductsDatabase();
