@@ -15,7 +15,8 @@ namespace VendingMachine.Model
     /// </summary>
     class ProductsDatabase
     {
-        private List<Product> products;
+        public List<Product> products;
+        public DataTable dtable;
 
         public List<Product> Products { get => products; set => products = value; }
 
@@ -25,14 +26,14 @@ namespace VendingMachine.Model
             //read from database
             using (SQLiteConnection conn = new SQLiteConnection("Data Source=VMbaza.db;Version=3;New=False;Compress=True;"))
             {
-                DataTable dt = new DataTable();
+                dtable = new DataTable();
                 conn.Open();
                 SQLiteCommand cmd = conn.CreateCommand();
                 cmd.CommandText = "SELECT * FROM Products";
                 SQLiteDataAdapter da = new SQLiteDataAdapter(cmd.CommandText, conn);
-                da.Fill(dt);
-                products = dt.AsEnumerable().Select(p => new Product(p.Field<Int64>(0), p.Field<string>(1),
-                    p.Field<double>(2), p.Field<Int64>(3), p.Field<Int64>(4))).ToList();
+                da.Fill(dtable);
+                products = dtable.AsEnumerable().Select(p => new Product(p.Field<Int64>(0), p.Field<string>(1),
+                    p.Field<double>(2), p.Field<Int64>(3))).ToList();
             }
         }
 
@@ -73,7 +74,7 @@ namespace VendingMachine.Model
             string output = "\n";
             foreach (var prod in products)
             {
-                output += prod.Id + " " + prod.Name + " Cena: " + prod.Price + "zł";
+                output += prod.Id + " " + prod.Name + " Cena: " + prod.Price + "zł";                
                 output += "\n";
             }
             return output;
@@ -206,7 +207,6 @@ namespace VendingMachine.Model
             }
 
         }
-
         private static void Pause()
         {
             Thread.Sleep(3000);

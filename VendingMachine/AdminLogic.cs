@@ -47,6 +47,7 @@ namespace VendingMachine
                 }
                 catch (System.FormatException)
                 {
+                    Console.WriteLine("To nie jest jedna z opcji");
                     correctInput = false;
                 }
             } while (!correctInput);
@@ -93,6 +94,7 @@ namespace VendingMachine
                 }
                 catch (System.FormatException)
                 {
+                    Console.WriteLine("To nie jest jedna z opcji");
                     correctInput = false;
                 }
             } while (!correctInput);
@@ -107,6 +109,7 @@ namespace VendingMachine
                 case 9:
                     break;
                 default:
+                    Console.WriteLine("Coś poszło nie tak");
                     break;
             }
         }        
@@ -203,7 +206,7 @@ namespace VendingMachine
                 }
                 catch (System.FormatException)
                 {
-                    Console.WriteLine("Zrobiłeś coś źle, podaj wyprować daną jeszcze raz");
+                    Console.WriteLine("Zrobiłeś coś źle, wyprować daną jeszcze raz");
                     correctInputP = false;
                 }
             } while (!correctInputP);
@@ -220,7 +223,7 @@ namespace VendingMachine
                 }
                 catch (System.FormatException)
                 {
-                    Console.WriteLine("Zrobiłeś coś źle, podaj wyprować daną jeszcze raz");
+                    Console.WriteLine("Zrobiłeś coś źle, wyprować daną jeszcze raz");
                     correctInputQ = false;
                 }
             } while (!correctInputQ);  
@@ -233,10 +236,12 @@ namespace VendingMachine
                 try
                 {
                     input = int.Parse(Console.ReadLine());
+                    correctInput = true;
                 }
                 catch (System.FormatException)
                 {
-                    Console.WriteLine("Wybierz dostępną opcję");
+                    correctInput = false;
+                    Console.WriteLine("To nie jest jedna z opcji");
                 }
             } while (!correctInput);
 
@@ -250,7 +255,7 @@ namespace VendingMachine
                     AddNewProduct();
                     break;               
                 default:
-                    Console.WriteLine("Nie ma takiej opcji");
+                    Console.WriteLine("To nie jest jedna z opcji");
                     break;
             }
 

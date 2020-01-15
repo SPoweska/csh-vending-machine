@@ -51,6 +51,22 @@ namespace VendingMachine.Model
             }
             return output;
         }
+        public static void AddTransaction(int id)
+        {
+            ProductsDatabase pd = new ProductsDatabase();            
+            int number = id;                        
+            var prod=pd.FetchProductById(number);
+            string name=prod.Name;
+            double price = prod.Price;
+            using (SQLiteConnection conn = new SQLiteConnection("Data Source=VMbaza.db;Version=3;New=False;Compress=True;"))
+                    {
+                        conn.Open();
+                        SQLiteCommand cmd = conn.CreateCommand();
+                        cmd.CommandText = "INSERT INTO Transactions (DateTime,Name,Price) VALUES (datetime('now'),'"+name+"','"+price+"')";
+                        cmd.ExecuteNonQuery();
+                    }
+                
+        }
         public static void CleanTransactions()
         {
             using (SQLiteConnection conn = new SQLiteConnection("Data Source=VMbaza.db;Version=3;New=False;Compress=True;"))
@@ -67,29 +83,23 @@ namespace VendingMachine.Model
         }
         public static void ExportCSV()
         {
-            using (SQLiteConnection conn = new SQLiteConnection("Data Source=VMbaza.db;Version=3;New=False;Compress=True;"))
-            {
-                DataTable dt = new DataTable();
-                conn.Open();
-                SQLiteCommand cmd = conn.CreateCommand();
-                cmd.CommandText = "SELECT * FROM Transactions";
-                SQLiteDataAdapter da = new SQLiteDataAdapter(cmd.CommandText, conn);
-                da.Fill(dt);
+            ProductsDatabase pd = new ProductsDatabase();
+            DataTable dt = pd.dtable;            
 
-                StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
 
-                IEnumerable<string> columnNames = dt.Columns.Cast<DataColumn>().
+            IEnumerable<string> columnNames = dt.Columns.Cast<DataColumn>().
                                                   Select(column => column.ColumnName);
-                sb.AppendLine(string.Join(",", columnNames));
+            sb.AppendLine(string.Join(",", columnNames));
 
-                foreach (DataRow row in dt.Rows)
+            foreach (DataRow row in dt.Rows)
                 {
-                    IEnumerable<string> fields = row.ItemArray.Select(field => field.ToString());
-                    sb.AppendLine(string.Join(",", fields));
+                 IEnumerable<string> fields = row.ItemArray.Select(field => field.ToString());
+                 sb.AppendLine(string.Join(",", fields));
                 }
 
-                File.WriteAllText("Transactions.csv", sb.ToString());
-            }
+            File.WriteAllText("Transactions.csv", sb.ToString());
+            
             Console.WriteLine("Wyeksportowano transakcje pomyślnie");
             Thread.Sleep(3000);
             AdminLogic.CheckAdminInfo();

@@ -116,7 +116,8 @@ namespace VendingMachine
                 {
                     ShowCredit();
                     Output(nominals);
-                    Output(notAcceptedNominal);
+                    Console.Clear();
+                    Output(notAcceptedNominal);                    
                     continue;
                 }
 
@@ -182,6 +183,7 @@ namespace VendingMachine
             {
                 fullMoney = ChangeCalculator.CalculateChange(fullMoney, (float)productCost);
                 ProductsDatabase.Decrement(prod, products);
+                TransactionsDatabase.AddTransaction(prod);
                 Console.Clear();
             }
         }
