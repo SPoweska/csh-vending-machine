@@ -93,11 +93,11 @@ namespace VendingMachine.Model
             }
             return output;
         }
-        public static void Increment(int id, ProductsDatabase product)
+        public static void Increment(int id,int quantity, ProductsDatabase product)
         {
 
             int length = product.Products.Count;
-            int increment = 1;
+            int increment = quantity;
 
             if (length >= id)
             {
@@ -150,12 +150,13 @@ namespace VendingMachine.Model
                 Pause();
                 MachineLogic.ChooseProduct(product);
             }
-
-
         }
+
+
         private static void Pause()
         {
             Thread.Sleep(3000);
         }
+
     }
 }

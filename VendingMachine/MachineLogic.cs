@@ -23,8 +23,10 @@ namespace VendingMachine
         private const string coinLoop = "1 - wybierz produkt, 2 - dobrodzieju, wrzuć więcej pinionżków";
         private const string chooseError = "Wybrano niewałaściwą akcję, spróbuj jeszcze raz.";
         private const string chooseProduct = "Wybierz produkt";
-        private const string notEnoughMoney = "Nie masz wystarczająco dużo pinionżków";
+        private const string notEnoughMoney = "Nie masz wystarczająco dużo pinionżków";        
         private const string endTransaction = "Oto twoja reszta: ";
+        private const string wrongNumber = "Wybrano zły numer!";
+        private const string wrongFormat = "To nie jest numer!";
 
         #endregion
 
@@ -156,14 +158,14 @@ namespace VendingMachine
                     else
                     {
                         choosedProduct = false;
-                        Console.WriteLine("Wybrano zły numer!");
+                        Output(wrongNumber);
                         Thread.Sleep(2500);
                     }
                 }
-                catch (Exception)
+                catch (System.FormatException)
                 {   
                     choosedProduct = false;
-                    Console.WriteLine("To nie jest numer!");
+                    Output(wrongFormat);
                     Thread.Sleep(2500);
                 }                 
             } while (!choosedProduct);                     

@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VendingMachine.Model;
+using System.Threading;
 
 namespace VendingMachine
 {
-    static class AdminLogic
+    class AdminLogic
     {
-        static string adminName;
+        static string adminName;        
 
         public static bool IsAdmin(string input)
         {
@@ -136,12 +137,9 @@ namespace VendingMachine
 
         private static void AddProduct() //Dokończyć
         {
-            bool choosedProduct = false;
             int input = -1;
-            int choice = 0;
-            int prod = 0;
-            int increment = 1;
             bool correctInput = false;
+            int quantity = -1;
             Console.Clear();
             ProductsDatabase products = new ProductsDatabase();
             Console.WriteLine(products.ShowAdmin());
@@ -161,44 +159,45 @@ namespace VendingMachine
                     correctInput = false;
                 }
             } while (!correctInput);
-            Console.WriteLine("Czy chcesz dodać produkt numer " + input + "?\n" + "1 - Tak\n" + "2 - Chce dodać inny produkt" + "3 - Nie");
             do
             {
+                Console.WriteLine("Ile sztuk chcesz dodać?  " + adminName);
                 try
                 {
-                    choice = int.Parse(Console.ReadLine());
+                    quantity = int.Parse(Console.ReadLine());
                     correctInput = true;
+
                 }
                 catch (System.FormatException)
                 {
                     correctInput = false;
                 }
             } while (!correctInput);
-            //switch (choice)
-            //{
-            //    case 1:
-            //        int length = products.Products.Count;
-            //        for (int i = 1; i <= length; i++)
-            //        {
-            //            if (i == prod)
-            //            {
-            //                //increment choosed product quantity
-            //                choosedProduct = true;
-            //                using (SQLiteConnection conn = new SQLiteConnection("Data Source=VMbaza.db;Version=3;New=False;Compress=True;"))
-            //                {
-            //                    conn.Open();
-            //                    SQLiteCommand cmd = conn.CreateCommand();
-            //                    cmd.CommandText = "UPDATE Products SET Quantity = Quantity - '" + increment + "' WHERE ID='" + prod + "'";
-            //                    cmd.ExecuteNonQuery();
 
-            //                }
-            //            }
-            //        }
+            Console.WriteLine("Czy chcesz dodać "+quantity+ " sztuk produktu numer " + input + "?\n" + "1 - Tak\n" + "2 - Nie\n" + "3 - Chce dodać inny produkt");
+            int actionChoice = int.Parse(Console.ReadLine());
+
+            switch (actionChoice)
+            {
+                case 1:                    
+                    ProductsDatabase.Increment(input,quantity,products);
+                    Console.WriteLine("Dodano");
+                    Thread.Sleep(2500);
+                    StartAdminLogic();
+                    break;
+                case 2:
+                    StartAdminLogic();
+                    break;
+                case 3:
+                    AddProduct();
+                    break;
+                default:
+                    Console.WriteLine("Coś poszło nie tak!");
+                    break;
+            }
 
 
-            //    default:
-            //        break;
-            //}
+
         }
             
             private static int CheckAdminInfo()
