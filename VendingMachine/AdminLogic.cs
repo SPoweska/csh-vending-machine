@@ -282,7 +282,7 @@ class AdminLogic
                 try
                 {
                     quantity = int.Parse(Console.ReadLine());
-                    if (input > 0)
+                    if (quantity > 0)
                     {
                         correctInput = true;
                     }
