@@ -70,6 +70,8 @@
     <Compile Include="Model\EmployeesDatabase.cs" />
     <Compile Include="Model\Product.cs" />
     <Compile Include="Model\ProductsDatabase.cs" />
+    <Compile Include="Model\Transaction.cs" />
+    <Compile Include="Model\TransactionsDatabase.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

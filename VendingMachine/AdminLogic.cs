@@ -49,55 +49,76 @@ namespace VendingMachine
                     Console.WriteLine("Coś poszło nie tak!");
                     break;
             }
-        }
+        }        
 
         private static void ShowTransactions()
         {
-            ProductsDatabase productsDatabase = new ProductsDatabase();
-            Console.WriteLine(productsDatabase.ShowAdmin());
+            TransactionsDatabase transactionsDatabase = new TransactionsDatabase();
+            Console.WriteLine(transactionsDatabase.ShowTransactions());
         }
 
         private static void AddNewProduct() //Dokończyć i uporządkować
-        {            
+        {
+            bool correctInputP=false;
+            bool correctInputQ=false;
+            bool correctInput = false;
             string name;
             float price=0f;
-            int quantity=0;
-            int input;
+            int quantity=-1;
+            int input=-1;
             
             Console.Clear();
             Console.WriteLine("Dodaj nowy produkt \n" + "Podaj nazwę produktu:");
             name = Console.ReadLine();
-            Console.WriteLine("Podaj cenę :");
+            do
+            {
+                Console.WriteLine("Podaj cenę :");
                 try
-                
-                { 
-                    price = float.Parse(Console.ReadLine());                   
+
+                {
+                    price = float.Parse(Console.ReadLine());
+                    correctInputP = true;
                 }
                 catch (System.FormatException)
                 {
-                    Console.WriteLine("Coś nie pykło");
-
+                    Console.WriteLine("Zrobiłeś coś źle, podaj wyprować daną jeszcze raz");
+                    correctInputP = false;
                 }
-            Console.WriteLine("Podaj ilość :");
+            } while (!correctInputP);
+
+            do
+            { Console.WriteLine("Podaj ilość :");
                 try
                 {
                     quantity = int.Parse(Console.ReadLine());
+                    if (quantity >= 1)
+                    {
+                        correctInputQ = true;
+                    }
                 }
                 catch (System.FormatException)
                 {
-                    Console.WriteLine("Coś nie pykło");
+                    Console.WriteLine("Zrobiłeś coś źle, podaj wyprować daną jeszcze raz");
+                    correctInputQ = false;
                 }
-            Console.WriteLine("Czy wszystko się zgadza " + adminName + "?\n" + "Nazwa: " + name + " cena: " + price + " ilość: " + quantity);
-            Console.WriteLine("1 - Wszystko git  \n 2 - Chce poprawić dane \n");
+            } while (!correctInputQ);  
+            
+
+            do
+            {
+                Console.WriteLine("Czy wszystko się zgadza " + adminName + "?\n" + "Nazwa: " + name + " cena: " + price + " ilość: " + quantity);
+                Console.WriteLine("1 - Wszystko git  \n 2 - Chce poprawić dane \n");
                 try
                 {
                     input = int.Parse(Console.ReadLine());
                 }
                 catch (System.FormatException)
                 {
-                    Console.WriteLine("Coś nie pykło");
+                    Console.WriteLine("Wybierz dostępną opcję");
                 }
-            input =int.Parse(Console.ReadLine());
+            } while (!correctInput);
+
+
             switch (input)
             {
                 case 1:
@@ -105,22 +126,30 @@ namespace VendingMachine
                     break;
                 case 2:
                     AddNewProduct();
-                    break;                
+                    break;               
                 default:
-                    Console.WriteLine("Coś poszło nie tak!");
+                    Console.WriteLine("Nie ma takiej opcji");
                     break;
             }
 
         }
+
         private static void AddProduct() //Dokończyć
         {
+            bool choosedProduct = false;
             int input = -1;
+            int choice = 0;
+            int prod = 0;
+            int increment = 1;
             bool correctInput = false;
             Console.Clear();
-            ShowTransactions();
+            ProductsDatabase products = new ProductsDatabase();
+            Console.WriteLine(products.ShowAdmin());
+
+
             do
             {
-                Console.WriteLine("Wybierz produkt który chcesz uzupełnić "+adminName);
+                Console.WriteLine("Wybierz produkt który chcesz uzupełnić " + adminName);
                 try
                 {
                     input = int.Parse(Console.ReadLine());
@@ -131,18 +160,54 @@ namespace VendingMachine
                 {
                     correctInput = false;
                 }
-            } while (!correctInput);            
+            } while (!correctInput);
+            Console.WriteLine("Czy chcesz dodać produkt numer " + input + "?\n" + "1 - Tak\n" + "2 - Chce dodać inny produkt" + "3 - Nie");
+            do
+            {
+                try
+                {
+                    choice = int.Parse(Console.ReadLine());
+                    correctInput = true;
+                }
+                catch (System.FormatException)
+                {
+                    correctInput = false;
+                }
+            } while (!correctInput);
+            //switch (choice)
+            //{
+            //    case 1:
+            //        int length = products.Products.Count;
+            //        for (int i = 1; i <= length; i++)
+            //        {
+            //            if (i == prod)
+            //            {
+            //                //increment choosed product quantity
+            //                choosedProduct = true;
+            //                using (SQLiteConnection conn = new SQLiteConnection("Data Source=VMbaza.db;Version=3;New=False;Compress=True;"))
+            //                {
+            //                    conn.Open();
+            //                    SQLiteCommand cmd = conn.CreateCommand();
+            //                    cmd.CommandText = "UPDATE Products SET Quantity = Quantity - '" + increment + "' WHERE ID='" + prod + "'";
+            //                    cmd.ExecuteNonQuery();
+
+            //                }
+            //            }
+            //        }
 
 
+            //    default:
+            //        break;
+            //}
         }
-
-        private static int CheckAdminInfo()
+            
+            private static int CheckAdminInfo()
         {
             bool correctInput = false;
             int input = -1;
             do
             {
-                Console.WriteLine("Siema " + adminName + " czy chcesz: \n" + "1 - Uzupełnić produkt \n 2 - Zobaczyc liste transakcji \n"+"3 - Dodać nowy produkt");
+                Console.WriteLine("Siema " + adminName + " czy chcesz: \n" + "1 - Uzupełnić produkt \n" + "2 - Zobaczyc liste transakcji \n" + "3 - Dodać nowy produkt");
                 try
                 {
                     input = int.Parse(Console.ReadLine());
@@ -155,5 +220,5 @@ namespace VendingMachine
             } while (!correctInput);
             return input;
         }
+        }
     }
-}

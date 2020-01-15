@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.SQLite;
 using System.Data;
+using System.Threading;
 
 namespace VendingMachine.Model
 {
@@ -19,7 +20,7 @@ namespace VendingMachine.Model
         public List<Product> Products { get => products; set => products = value; }
 
         public ProductsDatabase()
-        { 
+        {
             products = new List<Product>();
             //read from database
             using (SQLiteConnection conn = new SQLiteConnection("Data Source=VMbaza.db;Version=3;New=False;Compress=True;"))
@@ -50,21 +51,16 @@ namespace VendingMachine.Model
             return null;
         }
 
-        public static void AddNewProduct(string name,float price,int quantity)//zrobić
+        public static void AddNewProduct(string name, float price, int quantity)
         {
-            int sold = 0;
             using (SQLiteConnection conn = new SQLiteConnection("Data Source=VMbaza.db;Version=3;New=False;Compress=True;"))
             {
                 conn.Open();
                 SQLiteCommand cmd = conn.CreateCommand();
-                cmd.CommandText = "INSERT INTO Products (Name,Price,Quantity,Sold) VALUES ('" + name + "','" + price + "','" + quantity + "','" +sold+"')";
-                cmd.ExecuteNonQuery();               
+                cmd.CommandText = "INSERT INTO Products (Name,Price,Quantity) VALUES ('" + name + "','" + price + "','" + quantity + "')";
+                cmd.ExecuteNonQuery();
 
             }
-
-        }
-        public void UpdateProductQuantity(int index, int quantity)//zrobić
-        {
 
         }
 
@@ -75,14 +71,14 @@ namespace VendingMachine.Model
         public string Show()
         {
             string output = "\n";
-            foreach(var prod in products)
+            foreach (var prod in products)
             {
                 output += prod.Id + " " + prod.Name + " Cena: " + prod.Price + "zł";
                 output += "\n";
             }
             return output;
-        } 
-        
+        }
+
         /// <summary>
         /// Returns text with all products
         /// </summary>
@@ -90,12 +86,76 @@ namespace VendingMachine.Model
         public string ShowAdmin()
         {
             string output = "\n";
-            foreach(var prod in products)
+            foreach (var prod in products)
             {
                 output += prod.Id + " " + prod.Name + " Ilość: " + prod.Quantity;
                 output += "\n";
             }
             return output;
+        }
+        public static void Increment(int id, ProductsDatabase product)
+        {
+
+            int length = product.Products.Count;
+            int increment = 1;
+
+            if (length >= id)
+            {
+                for (int i = 1; i <= length; i++)
+                {
+                    if (i == id)
+                    {
+                        //increment choosed product quantity                    
+                        using (SQLiteConnection conn = new SQLiteConnection("Data Source=VMbaza.db;Version=3;New=False;Compress=True;"))
+                        {
+                            conn.Open();
+                            SQLiteCommand cmd = conn.CreateCommand();
+                            cmd.CommandText = "UPDATE Products SET Quantity = Quantity + '" + increment + "' WHERE ID='" + id + "'";
+                            cmd.ExecuteNonQuery();
+
+                        }
+                    }
+                }
+            }
+            else
+            {
+
+            }
+        }
+        public static void Decrement(int id, ProductsDatabase product)
+        {
+            int length = product.Products.Count;
+            int decrement = 1;
+            if (id<=length)
+            {
+                for (int i = 1; i <= length; i++)
+                {
+                    if (i == id)
+                    {
+                        //decrement choosed product quantity                    
+                        using (SQLiteConnection conn = new SQLiteConnection("Data Source=VMbaza.db;Version=3;New=False;Compress=True;"))
+                        {
+                            conn.Open();
+                            SQLiteCommand cmd = conn.CreateCommand();
+                            cmd.CommandText = "UPDATE Products SET Quantity = Quantity - '" + decrement + "' WHERE ID='" + id + "'";
+                            cmd.ExecuteNonQuery();
+
+                        }
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("Wybrano niewłaściwy numer");
+                Pause();
+                MachineLogic.ChooseProduct(product);
+            }
+
+
+        }
+        private static void Pause()
+        {
+            Thread.Sleep(3000);
         }
     }
 }

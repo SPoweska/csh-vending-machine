@@ -134,11 +134,12 @@ namespace VendingMachine
         /// Choose a product from the database
         /// </summary>
         /// <param name="products">database to choose from</param>
-        private static void ChooseProduct(ProductsDatabase products)
+        public static void ChooseProduct(ProductsDatabase products)
         {
             bool choosedProduct = false;
             int prod = 0;
-            int decrement=1;
+            double productCost;
+            int length = products.Products.Count;
             do
             {
                 Console.Clear();
@@ -148,32 +149,25 @@ namespace VendingMachine
                 try
                 {
                     prod = int.Parse(Input());
-                }
-                catch (System.FormatException)
-                {
-                    continue;
-                }
-
-                int length = products.Products.Count;
-                for (int i = 1; i <= length; i++)
-                {
-                    if (i == prod)
+                    if (length >= prod)
                     {
-                        //decrement choosed product quantity
                         choosedProduct = true;
-                        using (SQLiteConnection conn = new SQLiteConnection("Data Source=VMbaza.db;Version=3;New=False;Compress=True;"))
-                        {
-                            conn.Open();
-                            SQLiteCommand cmd = conn.CreateCommand();                            
-                            cmd.CommandText = "UPDATE Products SET Quantity = Quantity - '"+decrement+"' WHERE ID='" + prod + "'";
-                            cmd.ExecuteNonQuery();                            
-
-                        }
+                    }
+                    else
+                    {
+                        choosedProduct = false;
+                        Console.WriteLine("Wybrano zły numer!");
+                        Thread.Sleep(2500);
                     }
                 }
-            } while (!choosedProduct);
-
-            double productCost = products.Products[prod - 1].Price;
+                catch (Exception)
+                {   
+                    choosedProduct = false;
+                    Console.WriteLine("To nie jest numer!");
+                    Thread.Sleep(2500);
+                }                 
+            } while (!choosedProduct);                     
+            productCost = products.Products[prod - 1].Price;
 
             //check if price is lower or equal to credit
             if (productCost > fullMoney)
@@ -184,6 +178,7 @@ namespace VendingMachine
             else
             {
                 fullMoney = ChangeCalculator.CalculateChange(fullMoney, (float)productCost);
+                ProductsDatabase.Decrement(prod, products);
                 Console.Clear();
             }
         }
