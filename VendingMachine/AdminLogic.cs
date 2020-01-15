@@ -316,7 +316,6 @@ class AdminLogic
                 }
             } while (!correctInput);
 
-
             switch (input)
             {
                 case 1:
