@@ -116,8 +116,7 @@ class AdminLogic
         /// Transaction menu selection
         /// </summary>
         public static void ChooseTransAction()
-        {
-            Console.Clear();
+        {            
             int input = -1;
            bool correctInput = false;
             Console.WriteLine("\n" + "Czy chcesz:\n" + "1 - Wyeksportować transakcje do pliku CSV\n" + "2 - Wyczyścić listę transakcji\n" + "9 - Wrócić do poprzedniego ekranu");            
@@ -346,7 +345,7 @@ class AdminLogic
             Console.Clear();
             ProductsDatabase products = new ProductsDatabase();
             Console.WriteLine(products.ShowAdmin());
-            Int64 productQuantity;
+            
 
 
             do
@@ -357,6 +356,7 @@ class AdminLogic
                     input = int.Parse(Console.ReadLine());
                     if (input > 0)
                     {
+                        prod = input;
                         correctInput = true;
                     }
                     else { correctInput = false; }
@@ -385,52 +385,59 @@ class AdminLogic
                     correctInput = false;
                 }
             } while (!correctInput);
-            productQuantity = Convert.ToInt32(products.Products[prod - 1].Quantity);
-            
-            if (quantity>=productQuantity)
+
+            long productQuantity = (products.Products[prod - 1].Quantity);            
+
+            if (quantity <= productQuantity)
             {
-                quantity = Convert.ToInt32(productQuantity);
-            }
-            Console.WriteLine(adminName + " Czy chcesz wyjąć " + quantity + " sztuk produktu numer " + input + "?\n" + "1 - Tak\n" + "2 - Nie\n" + "3 - Chce wyjąć inny produkt");
-            do
-            {
-                try
+                
+                Console.WriteLine(adminName + " Czy chcesz wyjąć " + quantity + " sztuk produktu numer " + input + "?\n" + "1 - Tak\n" + "2 - Nie\n" + "3 - Chce wyjąć inny produkt");
+                do
                 {
-                    actionChoice = int.Parse(Console.ReadLine());
-                    if (actionChoice > 0)
+                    try
                     {
-                        correctInput = true;
+                        actionChoice = int.Parse(Console.ReadLine());
+                        if (actionChoice > 0)
+                        {
+                            correctInput = true;
+                        }
+                        else { correctInput = false; }
                     }
-                    else { correctInput = false; }
-                }
-                catch (System.FormatException)
+                    catch (System.FormatException)
+                    {
+                        correctInput = false;
+                    }
+                } while (!correctInput);
+
+                switch (actionChoice)
                 {
-                    correctInput = false;
+                    case 1:
+                        ProductsDatabase.DropQuantity(input, quantity, products);
+                        Console.WriteLine("Wyjęto");
+                        Thread.Sleep(2500);
+                        StartAdminLogic();
+                        break;
+                    case 2:
+                        StartAdminLogic();
+                        break;
+                    case 3:
+                        DropProduct();
+                        break;
+                    default:
+                        Console.WriteLine("Coś poszło nie tak!");
+                        Thread.Sleep(2500);
+                        StartAdminLogic();
+                        break;
                 }
-            } while (!correctInput);
 
-            switch (actionChoice)
-            {
-                case 1:
-                    ProductsDatabase.DropQuantity(input, quantity, products);
-                    Console.WriteLine("Wyjęto");
-                    Thread.Sleep(2500);
-                    StartAdminLogic();
-                    break;
-                case 2:
-                    StartAdminLogic();
-                    break;
-                case 3:
-                    DropProduct();
-                    break;
-                default:
-                    Console.WriteLine("Coś poszło nie tak!");
-                    Thread.Sleep(2500);
-                    StartAdminLogic();
-                    break;
+
             }
-
-
+            else
+            {
+                Console.WriteLine("Nie możesz wyjąć więcej produktów niż jest dostępne");
+                Thread.Sleep(2500);
+                DropProduct();
+            }
         }
         /// <summary>
         /// Delete product record from database
@@ -447,7 +454,7 @@ class AdminLogic
 
             do
             {
-                Console.WriteLine("Wybierz produkt który ilość chcesz usunąć " + adminName);
+                Console.WriteLine("Wybierz produkt który chcesz usunąć " + adminName);
                 try
                 {
                     input = int.Parse(Console.ReadLine());

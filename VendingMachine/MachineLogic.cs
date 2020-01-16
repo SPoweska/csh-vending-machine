@@ -183,7 +183,9 @@ namespace VendingMachine
                 if (productCost > fullMoney)
                 {
                     Output(notEnoughMoney);
-                    StartMachine();
+                    Thread.Sleep(2500);
+                    Console.Clear();
+                    Pay();
                 }
                 else
                 {

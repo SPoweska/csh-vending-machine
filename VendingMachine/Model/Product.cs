@@ -11,19 +11,19 @@ namespace VendingMachine.Model
     /// </summary>
     class Product
     {
-        private Int64 id;
+        private long id;
         private string name;
         private double price;
-        private Int64 quantity;
+        private long quantity;
 
-        public Int64 Id { get => id; set => id = value; }
+        public long Id { get => id; set => id = value; }
         public string Name { get => name; set => name = value; }
         public double Price { get => price; set => price = value; }
-        public Int64 Quantity { get => quantity; set => quantity = value; }
+        public long Quantity { get => quantity; set => quantity = value; }
         /// <summary>
         /// Class constructor
         /// </summary>
-        public Product(Int64 id, string name, double price, Int64 quantity)
+        public Product(long id, string name, double price, long quantity)
         {
             this.id = id;
             this.name = name;

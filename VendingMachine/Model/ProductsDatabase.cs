@@ -34,8 +34,8 @@ namespace VendingMachine.Model
                 cmd.CommandText = "SELECT * FROM Products";
                 SQLiteDataAdapter da = new SQLiteDataAdapter(cmd.CommandText, conn);
                 da.Fill(dtable);
-                products = dtable.AsEnumerable().Select(p => new Product(p.Field<Int64>(0), p.Field<string>(1),
-                    p.Field<double>(2), p.Field<Int64>(3))).ToList();
+                products = dtable.AsEnumerable().Select(p => new Product(p.Field<long>(0), p.Field<string>(1),
+                    p.Field<double>(2), p.Field<long>(3))).ToList();
             }
         }
         /// <summary>
